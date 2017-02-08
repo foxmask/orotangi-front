@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import Book from './Book.vue'
 
 export default {
@@ -20,18 +19,6 @@ export default {
 		};
 	},
     components: { Book },
-	methods: {
-        addBook: function () {
-            var newBook = {
-                book: this.book.trim()
-            };
-            axios.post('http://127.0.0.1:8000/api/orotangi/books/', newBook)
-        },
-        delBook: function (book) {
-            axios.delete('http://127.0.0.1:8000/api/orotangi/books/'.concat(book.id));
-            this.books.splice(this.books.indexOf(book), 1);
-        }
-    },
     mounted: function() {
         axios.get('http://127.0.0.1:8000/api/orotangi/books/')
 			.then(response => {
