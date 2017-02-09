@@ -19,14 +19,13 @@ export default {
 		};
 	},
     components: { Book },
-    mounted: function() {
+    mounted() {
         axios.get('http://127.0.0.1:8000/api/orotangi/books/')
 			.then(response => {
 				this.books = response.data;
-            }).catch((error) => {
+            }).catch(error => {
                 console.log(error);
-            });
+            })
 	}
-
 }
 </script>

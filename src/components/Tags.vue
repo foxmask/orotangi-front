@@ -16,16 +16,16 @@ export default {
 	data() {
 		return {
 			tags: []
-		}
+		};
 	},
     components: { Tag },
     mounted() {
         axios.get('http://127.0.0.1:8000/api/orotangi/tags/')
             .then(response => {
-            this.tags = response.data;
-		}).catch((error) => {
+                this.tags = response.data;
+			}).catch(error => {
 				console.log(error);
-		});
+			})
     }
 }
 </script>

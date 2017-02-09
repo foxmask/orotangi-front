@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import marked from 'marked'
 import Note from './Note.vue'
 
@@ -41,15 +40,14 @@ export default {
         render(text) {
             return marked(text, { sanitize: false });
         }
-
 	},
     mounted() {
         axios.get('http://127.0.0.1:8000/api/orotangi/notes/')
-			.then(response => {
-				this.notes = response.data;
-            }).catch((error) => {
-                console.log(error);
-            });
-	}
+            .then(response => {
+                this.notes = response.data;
+            }).catch(error => {
+            console.log(error);
+        })
+    }
 }
 </script>

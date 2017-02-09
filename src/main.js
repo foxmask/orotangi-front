@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
-// import App from './App.vue'
-import Books from './components/Books.vue'
-import Tags from './components/Tags.vue'
-import Notes from './components/Notes.vue'
-import TakeNote from './components/TakeNote.vue'
+import App from './App.vue'
 
 window.axios = axios;
 
@@ -15,5 +11,5 @@ window.axios = axios;
 
 new Vue({
   el: '#root',
-  components: { Books, Tags, Notes, TakeNote},
+  render: h => h(App)
 });
