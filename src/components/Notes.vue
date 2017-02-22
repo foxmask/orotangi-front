@@ -1,6 +1,6 @@
 <template>
     <div class="notes">
-	<h3>My notes</h3>
+    <h1 class="title">My notes</h1>
     <div>
         <note v-for="note in notes">
             <header>{{ note.title }}</header>
@@ -17,20 +17,19 @@ import marked from 'marked'
 import Note from './Note.vue'
 
 export default {
-	data() {
-		return {
-			notes: []
-		}
-	},
+    data() {
+        return {
+            notes: []
+        }
+    },
     filters: {
         marked: marked
     },
-    components: { Note },
-	methods: {
+    components: { Note },
+    methods: {
         delNote(note) {
-            console.log(note);
-            axios.delete('http://127.0.0.1:8000/api/orotangi/notes/'
-				.concat(note.id) + '/'
+            axios.delete('/api/orotangi/notes/'
+                .concat(note.id) + '/'
                 ).catch((error) => {
                     console.log(error);
                 });
@@ -40,14 +39,14 @@ export default {
         render(text) {
             return marked(text, { sanitize: false });
         }
-	},
+    },
     mounted() {
-        axios.get('http://127.0.0.1:8000/api/orotangi/notes/')
+        axios.get('/api/orotangi/notes/')
             .then(response => {
                 this.notes = response.data;
             }).catch(error => {
-            console.log(error);
-        })
+                console.log(error);
+            })
     }
 }
 </script>

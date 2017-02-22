@@ -1,10 +1,10 @@
 <template>
-    <div>
-        <div class="col-xs-1 col-md-1 col-lg-1">
+    <div class="columns">
+        <div class="column is-1">
             <tags></tags>
             <books></books>
         </div>
-        <div class="col-xs-11 col-md-11 col-lg-11">
+        <div class="column is-11">
             <take-note></take-note>
         </div>
     </div>
