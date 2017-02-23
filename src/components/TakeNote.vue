@@ -76,7 +76,6 @@ export default {
         return {
             id: 0,
             book: 0,
-            user: 1,
             title: '',
             content: '',
             notes: [],
@@ -119,7 +118,6 @@ export default {
             this.content = note.content;
             this.tags = note.tags;
             this.id = note.id;
-            this.user = note.user;
             this.book = note.book;
         },
         /* update the note */
