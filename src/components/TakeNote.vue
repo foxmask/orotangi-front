@@ -1,17 +1,33 @@
 <template>
     <div class="columns">
         <div class="column is-3">
-            <h1 class="title">My notes</h1>
-            <note v-for="note in notes">
-                <header><a href="#" @click="editNote(note)">{{ note.title }}</a></header>
-                <p v-if="!note.tags" ><span class="tag is-black" v-for="tag in note.tags"> {{ tag.tag }} </span></p>
-                <hr/>
-            </note>
+            <nav class="panel">
+                <p class="panel-heading">Note</p>
+                <div class="panel-block">
+                    <button class="button is-primary is-outlined is-fullwidth" @click="newNote()">
+                        New note
+                    </button>
+                </div>
+                <div class="panel-block">
+                    <p class="control has-icon">
+                        <input class="input is-small" type="text" placeholder="Search">
+                        <span class="icon is-small">
+                            <i class="fa fa-search"></i>
+                        </span>
+                    </p>
+                </div>
+                <note v-for="note in notes">
+                    <a class="panel-block">
+                        <span class="panel-icon">
+                            <i class="fa fa-file"></i>
+                        </span>
+                        <a href="#" @click="editNote(note)">{{ note.title }}</a>
+                    </a>
+                </note>
+            </nav>
         </div>
         <div class="column is-9">
-            <h1 class="title">Take a note</h1>
             <form method="post" class="form-horizontal" @submit.prevent="doNote" @keydown="errors.clear($event.target.name)">
-                <label class="label">Book</label>
                 <p class="control">
                     <span class="select">
                     <select v-model="book">
@@ -22,21 +38,21 @@
                 </p>
 
                 <p class="control">
-                    <input placeholder="Title" class="input" name="title" id="title" v-model="title"/>
+                    <input placeholder="no title" class="input" name="title" id="title" v-model="title"/>
                 </p>
                 <span class="help is-danger" v-if="errors.has('title')" v-text="errors.get_error('title')"></span>
 
-
                 <p class="control">
-                    <textarea class="textarea" placeholder="Text" rows="10" name="content" id="content" v-model="content" debounce="300" :value="content"/>
+                    <textarea class="textarea" placeholder="" rows="10" name="content" id="content" v-model="content" debounce="300" :value="content"/>
                 </p>
                 <p class="control">
                     <div v-html="compiledMarkdown"></div>
                 </p>
                 <span class="help is-danger" v-if="errors.has('content')" v-text="errors.get_error('content')"></span>
+
                 <p class="control">
                     <button class="button is-primary" :disabled="errors.any()" >
-                        <i class="fa fa-save"></i>
+                        <i class="fa fa-save"></i> Save
                     </button>
                 </p>
 
@@ -47,6 +63,7 @@
 
 
 <script>
+import { EventBus } from '../core/EventBus.js';
 import Errors from "../core/Errors"
 import marked from 'marked';
 import Note from './Note.vue'
@@ -80,6 +97,11 @@ export default {
             } else {
                 this.updateNote(this.note);
             }
+        },
+        newNote() {
+            this.title = '';
+            this.content = '';
+            this.id = '';
         },
         addNote() {
             axios.post('/api/orotangi/notes/', this.$data)
@@ -115,7 +137,7 @@ export default {
             this.notes.splice(this.notes.indexOf(note), 1);
 
         },
-        render(text) {
+        renderContent(text) {
             return marked(text, { sanitize: false });
         },
         refresh(response) {
@@ -129,14 +151,11 @@ export default {
                     this.notes = response.data;
                 }).catch(error => { console.log(error); })
         },
-        getBooks() {
-            axios.get('/api/orotangi/books/')
-                .then(response => {
-                    this.books = response.data;
-                }).catch(error => { console.log(error); })
-        },
         load() {
-            this.getBooks();
+            /* receive an event "to consume" the books from the API only once */
+            EventBus.$on('getBooks', (books)=> {
+                this.books = books;
+            });
             this.getNotes();
         },
     },

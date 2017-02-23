@@ -11,6 +11,8 @@ axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
 // axios.defaults.headers.common['Access-Control-Allow-Headers'] = '*'
 
+let EventBus = new Vue();
+
 new Vue({
   el: '#root',
   render: h => h(App)

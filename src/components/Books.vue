@@ -1,15 +1,16 @@
 <template>
     <div class="books">
-    <h1 class="title">Books</h1>
-    <ul>
-        <book v-for="book in books">
-            {{ book.book }}
-        </book>
-    </ul>
+        <nav class="panel">
+            <p class="panel-heading">
+                <span class="panel-icon"><i class="fa fa-book"></i></span> Books
+            </p>
+            <book v-for="book in books">{{ book.book }}</book>
+        </nav>
     </div>
 </template>
 
 <script>
+import { EventBus } from '../core/EventBus.js';
 import Book from './Book.vue'
 
 export default {
@@ -20,9 +21,12 @@ export default {
     },
     components: { Book },
     mounted() {
+        /* get the books */
         axios.get('/api/orotangi/books/')
             .then(response => {
                 this.books = response.data;
+                /* emit an event to provide the books from the API only once */
+                EventBus.$emit("getBooks", this.books)
             }).catch(error => {
                 console.log(error);
             })

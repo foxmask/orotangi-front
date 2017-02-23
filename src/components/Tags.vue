@@ -1,11 +1,11 @@
 <template>
     <div class="tags">
-    <h1 class="title">Tags</h1>
-    <ul>
-        <tag v-for="tag in tags">
-            {{ tag.tag }}
-        </tag>
-    </ul>
+        <nav class="panel">
+            <p class="panel-heading">
+                <span class="panel-icon"><i class="fa fa-tag"></i></span> Tags
+            </p>
+            <tag v-for="tag in tags">{{ tag.tag }}</tag>
+        </nav>
     </div>
 </template>
 
