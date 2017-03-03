@@ -47,11 +47,8 @@
                             </a>
                         </p>
 
-                        <div class="control-label">
-                            <label class="label">Tags (separated by a comma)</label>
-                        </div>
                         <p class="control is-expanded">
-                            <input class="input" name="tags" id="tags" v-model="tags"/>
+                            <input-tag class="input" :placeholder="placeholder" :tags="tags" v-model="tags"></input-tag>
                             <span class="help is-danger" v-if="errors.has('tags')" v-text="errors.get_error('tags')"></span>
                         </p>
                     </div>
@@ -86,14 +83,19 @@
 
 
 <script>
+    /* to broadcast an event */
     import { EventBus } from '../core/EventBus.js';
+    /* errors class */
     import Errors from "../core/Errors"
+    /* markdown */
     import marked from 'marked';
+    /* tags */
+    import InputTag from 'vue-input-tag';
+    /* 'sub' vue */
     import Note from './Note.vue'
-    // import vSelect from "vue-select"
 
     export default {
-        components: { Note },
+        components: { Note, InputTag },
 
         data() {
             return {
@@ -101,17 +103,18 @@
                 book: 0,
                 title: '',
                 content: '',
-                tags: '',
+                tags: [],
                 notes: [],
                 errors: new Errors(),
                 books: [],
-                thebooks: ''
+                thebooks: '',
+                placeholder: '+tags',
             };
         },
         computed: {
             compiledMarkdown() {
                 return marked(this.content, { sanitize: true })
-            }
+            },
         },
         methods: {
             doNote(note) {
@@ -121,14 +124,28 @@
                     this.updateNote(this.note);
                 }
             },
+            /* remove unnecessary data before posting them */
+            record(data) {
+                delete data['notes'];
+                delete data['errors'];
+                delete data['thebooks'];
+                delete data['placeholder'];
+                delete data['books'];
+                delete data['notes'];
+                return data;
+            },
+            /* new note button pressed */
             newNote() {
                 this.title = '';
                 this.content = '';
                 this.id = '';
-                this.tags = '';
+                this.tags = [];
+                this.getBooks()
             },
+            /* create a note */
             addNote() {
-                axios.post('/api/orotangi/notes/', this.$data)
+                let data = this.record(this.$data);
+                axios.post('/api/orotangi/notes/', data)
                     .then(response => {
                         this.notes.push({'title': this.title,
                             'content': this.content,
@@ -143,23 +160,26 @@
                 this.content = note.content;
                 this.id = note.id;
                 this.book = note.book;
+                console.log(note.tags);
                 if (note.tags && note.tags.length > 0) {
                     this.tags = note.tags;
                 }
                 else {
-                    this.tags = '';
+                    this.tags = [];
                 }
             },
             /* update the note */
             updateNote(note) {
-                console.log(this.$data)
-                axios.patch('/api/orotangi/notes/' + this.$data.id + '/', this.$data)
+                console.log(this.$data);
+                let data = this.record(this.$data);
+                axios.patch('/api/orotangi/notes/' + this.$data.id + '/', data)
                     .then(response => {
                         this.load();
                         this.refresh();
                     })
                     .catch(error => this.errors.record(error.response.data))
             },
+            /* delete action pressed */
             delNote(id) {
                 axios.delete('/api/orotangi/notes/' + id + '/')
                     .then(response => {
@@ -168,26 +188,32 @@
                     })
                     .catch(error => { console.log(error); });
             },
+            /* render text un markdown */
             renderContent(text) {
                 return marked(text, { sanitize: false });
             },
+            /* clean the form */
             refresh(response) {
                 this.title = '';
                 this.content = '';
                 this.id = '';
-                this.tags = '';
+                this.tags = [];
             },
+            /* get all the note after adding a new one */
             getNotes() {
                 axios.get('/api/orotangi/notes/')
                     .then(response => {
                         this.notes = response.data;
                     }).catch(error => { console.log(error); })
             },
-            load() {
-                /* receive an event "to consume" the books from the API only once */
+            /* receive an event "to consume" the books from the API only once */
+            getBooks() {
                 EventBus.$on('getBooks', (books) => {
                     this.books = books;
                 });
+            },
+            load() {
+                this.getBooks();
                 this.getNotes();
             },
         },
