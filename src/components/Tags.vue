@@ -4,7 +4,7 @@
             <p class="panel-heading">
                 <span class="panel-icon"><i class="fa fa-tag"></i></span> Tags
             </p>
-            <tag v-for="tag in tags">{{ tag.tag }}</tag>
+            <tag v-for="tag in tags" :key="tags.id">{{ tag.tag }}</tag>
         </nav>
     </div>
 </template>
@@ -20,7 +20,7 @@ export default {
     },
     components: { Tag },
     mounted() {
-        axios.get('/api/orotangi/tags/')
+        this.axios.get('/api/orotangi/tags/')
             .then(response => {
                 this.tags = response.data;
             }).catch(error => {

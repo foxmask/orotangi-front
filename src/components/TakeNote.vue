@@ -1,31 +1,4 @@
 <template>
-    <div class="columns">
-        <div class="column is-3">
-            <nav class="panel">
-                <p class="panel-heading">Note</p>
-                <div class="panel-block">
-                    <button class="button is-primary is-outlined is-fullwidth" @click="newNote()">
-                        New note
-                    </button>
-                </div>
-                <div class="panel-block">
-                    <p class="control has-icon">
-                        <input class="input is-small" type="text" placeholder="Search">
-                        <span class="icon is-small">
-                            <i class="fa fa-search"></i>
-                        </span>
-                    </p>
-                </div>
-                <note v-for="note in notes">
-                    <a class="panel-block">
-                        <span class="panel-icon">
-                            <i class="fa fa-file"></i>
-                        </span>
-                        <a href="#" @click="editNote(note)">{{ note.title }}</a>
-                    </a>
-                </note>
-            </nav>
-        </div>
         <div class="column is-9">
             <form method="post" class="form-horizontal" @submit.prevent="doNote" @keydown="errors.clear($event.target.name)">
                 <div class="control is-horizontal">
@@ -33,14 +6,14 @@
                         <p class="control is-expanded">
                             <span class="select is-fullwidth">
                             <select v-model="book">
-                                <option v-for="book in books" v-bind:value="book.id">{{ book.book }}</option>
+                                <option v-for="book in books" v-bind:value="book.id">{{ book.book }}</option>
                             </select>
                             </span>
                             <span class="help is-danger" v-if="errors.has('book')" v-text="errors.get_error('book')"></span>
                         </p>
 
                         <p v-if="id" class="control is-expanded">
-                            <a class="button is-danger" :disabled="errors.any()" @click="delNote(id)" >
+                            <a class="button is-danger" :disabled="errors.any()" @click="removeNote(id)" >
                                 <span class="icon is-small">
                                   <i class="fa fa-trash"></i>
                                 </span>
@@ -78,149 +51,132 @@
 
             </form>
         </div>
-    </div>
+
 </template>
 
 
 <script>
-    /* to broadcast an event */
-    import { EventBus } from '../core/EventBus.js';
-    /* errors class */
-    import Errors from "../core/Errors"
-    /* markdown */
-    import marked from 'marked';
-    /* tags */
-    import InputTag from 'vue-input-tag';
-    /* 'sub' vue */
-    import Note from './Note.vue'
+/* to broadcast an event */
+import { EventBus } from '../core/EventBus.js';
+/* errors class */
+import Errors from "../core/Errors"
+/* markdown */
+import marked from 'marked';
+/* tags */
+import InputTag from 'vue-input-tag';
+/* 'sub' vue */
+import Note from './Note.vue'
 
-    export default {
-        components: { Note, InputTag },
+export default {
+    components: { Note, InputTag },
 
-        data() {
-            return {
-                id: 0,
-                book: 0,
-                title: '',
-                content: '',
-                tags: [],
-                notes: [],
-                errors: new Errors(),
-                books: [],
-                thebooks: '',
-                placeholder: '+tags',
-            };
+    data() {
+        return {
+            id: 0,
+            book: 0,
+            title: '',
+            content: '',
+            tags: [],
+            notes: [],
+            errors: new Errors(),
+            books: [],
+            thebooks: '',
+            placeholder: '+tags',
+        };
+    },
+    computed: {
+        compiledMarkdown() {
+            return marked(this.content, { sanitize: true })
         },
-        computed: {
-            compiledMarkdown() {
-                return marked(this.content, { sanitize: true })
-            },
+    },
+    methods: {
+        doNote(note) {
+            if (this.id == 0 || this.id == undefined) {
+                this.addNote();
+            } else {
+                this.updateNote(this.$data);
+            }
         },
-        methods: {
-            doNote(note) {
-                if (this.id == 0) {
-                    this.addNote();
-                } else {
-                    this.updateNote(this.note);
-                }
-            },
-            /* remove unnecessary data before posting them */
-            record(data) {
-                delete data['notes'];
-                delete data['errors'];
-                delete data['thebooks'];
-                delete data['placeholder'];
-                delete data['books'];
-                delete data['notes'];
-                return data;
-            },
-            /* new note button pressed */
-            newNote() {
-                this.title = '';
-                this.content = '';
-                this.id = '';
-                this.tags = [];
-                this.getBooks()
-            },
-            /* create a note */
-            addNote() {
-                let data = this.record(this.$data);
-                axios.post('/api/orotangi/notes/', data)
-                    .then(response => {
-                        this.notes.push({'title': this.title,
-                            'content': this.content,
-                            'id': response.data.id});
-                        this.refresh();
-                    })
-                    .catch(error => this.errors.record(error.response.data))
-            },
-            /* load the note to be modified */
-            editNote(note) {
-                this.title = note.title;
-                this.content = note.content;
-                this.id = note.id;
-                this.book = note.book;
-                console.log(note.tags);
-                if (note.tags && note.tags.length > 0) {
-                    this.tags = note.tags;
-                }
-                else {
-                    this.tags = [];
-                }
-            },
-            /* update the note */
-            updateNote(note) {
-                console.log(this.$data);
-                let data = this.record(this.$data);
-                axios.patch('/api/orotangi/notes/' + this.$data.id + '/', data)
-                    .then(response => {
-                        this.load();
-                        this.refresh();
-                    })
-                    .catch(error => this.errors.record(error.response.data))
-            },
-            /* delete action pressed */
-            delNote(id) {
-                axios.delete('/api/orotangi/notes/' + id + '/')
-                    .then(response => {
-                        this.notes.splice(this.notes.indexOf(id), 1);
-                        this.refresh(response);
-                    })
-                    .catch(error => { console.log(error); });
-            },
-            /* render text un markdown */
-            renderContent(text) {
-                return marked(text, { sanitize: false });
-            },
-            /* clean the form */
-            refresh(response) {
-                this.title = '';
-                this.content = '';
-                this.id = '';
-                this.tags = [];
-            },
-            /* get all the note after adding a new one */
-            getNotes() {
-                axios.get('/api/orotangi/notes/')
-                    .then(response => {
-                        this.notes = response.data;
-                    }).catch(error => { console.log(error); })
-            },
-            /* receive an event "to consume" the books from the API only once */
-            getBooks() {
-                EventBus.$on('getBooks', (books) => {
-                    this.books = books;
-                });
-            },
-            load() {
-                this.getBooks();
-                this.getNotes();
-            },
+        /* new note button pressed */
+        newNote() {
+            this.title = '';
+            this.content = '';
+            this.id = 0;
+            this.tags = [];
+            this.placeholder = '+tags',
+            this.getBooks()
         },
-        // load data from the API
-        mounted() {
-            this.load();
+        /* create a note */
+        addNote() {
+            let data = this.$data;
+            this.axios.post('/api/orotangi/notes/', data)
+                .then(response => {
+                    this.notes.push({'title': this.title,
+                        'content': this.content,
+                        'id': response.data.id});
+                    this.refresh();
+                })
+                .catch(error => this.errors.record(error.response.data))
         },
+        /* load the note to be modified */
+        editNote(note) {
+            this.id = note.id;
+            this.book = note.book;
+            this.title = note.title;
+            this.content = note.content;
+            this.tags = note.tags;
+            this.errors = new Errors();
+        },
+        /* update the note */
+        updateNote(note) {
+            let data = note
+            this.axios.patch('/api/orotangi/notes/' + note.id + '/', data)
+                .then(response => {
+                    this.load();
+                    this.refresh();
+                })
+                .catch(error => this.errors.record(error.response.data))
+        },
+        /* delete action pressed */
+        removeNote(note) {
+            EventBus.$emit("delNote", note);
+            this.refresh();
+        },
+        /* render text un markdown */
+        renderContent(text) {
+            return marked(text, { sanitize: false });
+        },
+        /* clean the form */
+        refresh() {
+            this.id = 0
+            this.title = ''
+            this.content = ''
+            this.tags = []
+            this.placeholder = '+tags'
+        },
+        /* receive an event "to consume" the notes from the API only once */
+        getNotes() {
+            EventBus.$on('getNotes', (notes) => {
+                this.notes = notes;
+            });
+        },
+        /* receive an event "to consume" the books from the API only once */
+        getBooks() {
+            EventBus.$on('getBooks', (books) => {
+                this.books = books;
+            });
+        },
+        load() {
+            this.getBooks();
+            this.getNotes();
+        },
+    },
+    // load data from the API
+    mounted() {
+        this.load();
+        EventBus.$on('editNote', (note) => { this.editNote(note); });
+        EventBus.$on('newNote', () => { this.newNote(); });
+    },
 
-    }
+}
 </script>

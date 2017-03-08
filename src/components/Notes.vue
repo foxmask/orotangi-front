@@ -1,19 +1,36 @@
 <template>
-    <div class="notes">
-    <h1 class="title">My notes</h1>
-    <div>
-        <note v-for="note in notes">
-            <header>{{ note.title }}</header>
-            <div v-html="render(note.content)"></div>
-            <footer><span v-for="tag in note.tags">{{ tag.tag }}</span></footer>
-            <button @click="delNote(note)">delete</button>
-            <hr/>
-        </note>
+    <div class="column is-3">
+        <nav class="panel">
+            <p class="panel-heading">Note</p>
+            <div class="panel-block">
+                <button class="button is-primary is-outlined is-fullwidth" @click="newNote()">
+                    New note
+                </button>
+            </div>
+            <div class="panel-block">
+                <p class="control has-icon">
+                    <input class="input is-small" type="text" placeholder="Search">
+                    <span class="icon is-small">
+                        <i class="fa fa-search"></i>
+                    </span>
+                </p>
+            </div>
+            <note v-for="note in notes" :key="note.id">
+                <a class="panel-block">
+                    <span class="panel-icon">
+                        <i class="fa fa-file"></i>
+                    </span>
+                    <a href="#" @click="editNote(note)">{{ note.title }}</a>
+                </a>
+            </note>
+        </nav>
     </div>
 </template>
 
 <script>
-import marked from 'marked'
+/* to broadcast an event */
+import { EventBus } from '../core/EventBus.js';
+// note content
 import Note from './Note.vue'
 
 export default {
@@ -22,31 +39,41 @@ export default {
             notes: []
         }
     },
-    filters: {
-        marked: marked
-    },
     components: { Note },
     methods: {
-        delNote(note) {
-            axios.delete('/api/orotangi/notes/'
-                .concat(note.id) + '/'
+        delNote(id) {
+            this.axios.delete('/api/orotangi/notes/' + id + '/'
                 ).catch((error) => {
                     console.log(error);
                 });
-            this.notes.splice(this.notes.indexOf(note), 1);
+            this.notes.splice(this.notes.indexOf(id), 1);
 
         },
-        render(text) {
-            return marked(text, { sanitize: false });
+        getNotes() {
+            this.axios.get('/api/orotangi/notes/')
+                .then(response => {
+                    this.notes = response.data;
+                    /* emit an event to provide the books from the API only once */
+                    EventBus.$emit("getNotes", this.notes)
+                }).catch(error => {
+                    console.log(error);
+                })
+        },
+        newNote(note) {
+            EventBus.$emit("newNote")
+        },
+        editNote(note) {
+            EventBus.$emit("editNote", note)
         }
     },
     mounted() {
-        axios.get('/api/orotangi/notes/')
-            .then(response => {
-                this.notes = response.data;
-            }).catch(error => {
-                console.log(error);
-            })
+        /* get the notes */
+        this.getNotes();
+        // reload the notes when one have been edited, created
+        EventBus.$on('delNote', (note) => {
+            this.delNote(note);
+        });
     }
+
 }
 </script>
