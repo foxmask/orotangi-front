@@ -6,7 +6,7 @@
                         <p class="control is-expanded">
                             <span class="select is-fullwidth">
                             <select v-model="book">
-                                <option v-for="book in books" v-bind:value="book.id">{{ book.book }}</option>
+                                <option v-for="book in books" v-bind:value="book.id">{{ book.name }}</option>
                             </select>
                             </span>
                             <span class="help is-danger" v-if="errors.has('book')" v-text="errors.get_error('book')"></span>
@@ -18,11 +18,6 @@
                                   <i class="fa fa-trash"></i>
                                 </span>
                             </a>
-                        </p>
-
-                        <p class="control is-expanded">
-                            <input-tag class="input" :placeholder="placeholder" :tags="tags" v-model="tags"></input-tag>
-                            <span class="help is-danger" v-if="errors.has('tags')" v-text="errors.get_error('tags')"></span>
                         </p>
                     </div>
                 </div>
@@ -62,13 +57,11 @@ import { EventBus } from '../core/EventBus.js';
 import Errors from "../core/Errors"
 /* markdown */
 import marked from 'marked';
-/* tags */
-import InputTag from 'vue-input-tag';
 /* 'sub' vue */
 import Note from './Note.vue'
 
 export default {
-    components: { Note, InputTag },
+    components: { Note },
 
     data() {
         return {
@@ -76,12 +69,10 @@ export default {
             book: 0,
             title: '',
             content: '',
-            tags: [],
             notes: [],
             errors: new Errors(),
             books: [],
-            thebooks: '',
-            placeholder: '+tags',
+            thebooks: ''
         };
     },
     computed: {
@@ -102,8 +93,6 @@ export default {
             this.title = '';
             this.content = '';
             this.id = 0;
-            this.tags = [];
-            this.placeholder = '+tags',
             this.getBooks()
         },
         /* create a note */
@@ -126,6 +115,7 @@ export default {
             this.content = note.content;
             this.tags = note.tags;
             this.errors = new Errors();
+            this.getBooks()
         },
         /* update the note */
         updateNote(note) {
@@ -151,8 +141,7 @@ export default {
             this.id = 0
             this.title = ''
             this.content = ''
-            this.tags = []
-            this.placeholder = '+tags'
+            this.getBooks()
         },
         /* receive an event "to consume" the notes from the API only once */
         getNotes() {
@@ -164,18 +153,18 @@ export default {
         getBooks() {
             EventBus.$on('getBooks', (books) => {
                 this.books = books;
-            });
+            })
         },
         load() {
-            this.getBooks();
-            this.getNotes();
-        },
+            this.getBooks()
+            this.getNotes()
+        }
     },
     // load data from the API
     mounted() {
         this.load();
-        EventBus.$on('editNote', (note) => { this.editNote(note); });
-        EventBus.$on('newNote', () => { this.newNote(); });
+        EventBus.$on('editNote', (note) => { this.editNote(note); })
+        EventBus.$on('newNote', () => { this.newNote(); })
     },
 
 }

@@ -4,7 +4,7 @@
             <p class="panel-heading">
                 <span class="panel-icon"><i class="fa fa-book"></i></span> Books
             </p>
-            <book v-for="book in books" :key="book.id">{{ book.book }}</book>
+            <book v-for="book in books" :key="book.id">{{ book.name }}</book>
         </nav>
     </div>
 </template>
