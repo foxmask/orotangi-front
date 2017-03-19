@@ -34,13 +34,13 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 
 ## Install the Bundle
 
-### put the bundle in the django app
+### put the bundle in the django app
 
 ```bash
 cp dist/orotangi_vue.js ../orotangi/orotangi/static/build/
 ```
 
-## Testing in Dev environment 
+## Testing in Dev environment
 
 in the config/index.js file you can set the proxy 
 
