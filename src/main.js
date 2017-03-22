@@ -15,18 +15,18 @@ Vue.use(VueAxios, axios)
 // Vue.config.productionTip = false
 
 // window.axios = axios;
-window.Cookies = require('js-cookie');
+window.Cookies = require('js-cookie')
 
-var csrftoken = Cookies.get('csrftoken');
+var csrftoken = Cookies.get('csrftoken')
 
-axios.defaults.headers.common['cookiename'] = 'csrftoken';
-axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = "*";
+axios.defaults.headers.common['cookiename'] = 'csrftoken'
+axios.defaults.headers.common['X-CSRFToken'] = csrftoken
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 // axios.defaults.headers.common['Access-Control-Allow-Headers'] = '*'
 
-let EventBus = new Vue();
+var EventBus = new Vue()
 
 new Vue({
   el: '#root',
   render: h => h(App)
-});
+})

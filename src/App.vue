@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import Books from './components/Books.vue';
-import Notes from './components/Notes.vue';
-import TakeNote from './components/TakeNote.vue';
+import Books from './components/Books.vue'
+import Notes from './components/Notes.vue'
+import TakeNote from './components/TakeNote.vue'
 export default {
-    components: { Books, Notes, TakeNote }
+  components: { Books, Notes, TakeNote }
 }
 </script>

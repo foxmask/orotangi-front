@@ -13,19 +13,19 @@
 import Tag from './Tag.vue'
 
 export default {
-    data() {
-        return {
-            tags: []
-        };
-    },
-    components: { Tag },
-    mounted() {
-        this.axios.get('/api/orotangi/tags/')
-            .then(response => {
-                this.tags = response.data;
-            }).catch(error => {
-                console.log(error);
-            })
+  data () {
+    return {
+      tags: []
     }
+  },
+  components: { Tag },
+  mounted () {
+    this.axios.get('/api/orotangi/tags/')
+      .then(response => {
+        this.tags = response.data
+      }).catch(error => {
+        console.log(error)
+      })
+  }
 }
 </script>
