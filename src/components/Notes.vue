@@ -23,11 +23,13 @@
                     <a href="#" @click="editNote(note)">{{ note.title }}</a>
                 </a>
             </note>
+            <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading"></infinite-loading>
         </nav>
     </div>
 </template>
 
 <script>
+import InfiniteLoading from 'vue-infinite-loading'
 /* to broadcast an event */
 import { EventBus } from '../core/EventBus.js'
 // note content
@@ -39,8 +41,28 @@ export default {
       notes: []
     }
   },
-  components: { Note },
+  components: { Note, InfiniteLoading },
   methods: {
+    onInfinite () {
+      this.axios.get('/api/orotangi/notes/', {
+        params: {
+          page: (this.notes.length / 20) + 1
+        }
+      }).then((res) => {
+        // console.log(res.data.results)
+        EventBus.$emit('getNotes', this.notes)
+        if (res.data.count) {
+          this.notes = this.notes.concat(res.data.results)
+          this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
+          if (this.notes.length / 20 === 10) {
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+          }
+        } else {
+          this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
+        }
+      })
+    },
+
     delNote (id) {
       this.axios.delete('/api/orotangi/notes/' + id + '/'
         ).catch((error) => {
@@ -67,7 +89,7 @@ export default {
   },
   mounted () {
     /* get the notes */
-    this.getNotes()
+    // this.getNotes()
     // reload the notes when one have been edited, created
     EventBus.$on('delNote', (note) => {
       this.delNote(note)
