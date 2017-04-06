@@ -5,12 +5,16 @@ import Vue from 'vue'
 import axios from 'axios'
 // https://github.com/imcvampire/vue-axios
 import VueAxios from 'vue-axios'
+// https://github.com/vuejs/vue-router/
+import VueRouter from 'vue-router'
 
 import App from './App.vue'
 
 // get the SERVER_URL of prod or dev environment
 axios.defaults.baseURL = process.env.SERVER_URL
+
 Vue.use(VueAxios, axios)
+Vue.use(VueRouter)
 
 // Vue.config.productionTip = false
 
@@ -26,7 +30,21 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 
 var EventBus = new Vue()
 
+import Books from '@/components/Books'
+import Notes from '@/components/Notes'
+
+const routes = [
+  { path: '/books', component: Books, name: 'books'},
+  { path: '/notes', component: Notes, name: 'notes'},
+  { path: '/book/:bookName/notes', component: Notes, name: 'notesbybook', props: true }
+]
+
+const router = new VueRouter({
+  routes // short for routes: routes
+})
+
 new Vue({
+  router,
   el: '#root',
   render: h => h(App)
 })

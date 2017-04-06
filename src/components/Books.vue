@@ -4,8 +4,11 @@
             <p class="panel-heading">
                 <span class="panel-icon"><i class="fa fa-book"></i></span> Books
             </p>
-            <book v-for="book in books" :key="book.id">{{ book.name }}</book>
+            <book v-for="book in books" :key="book.id">
+              <router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>
+            </book>
         </nav>
+      <router-view></router-view>
     </div>
 </template>
 

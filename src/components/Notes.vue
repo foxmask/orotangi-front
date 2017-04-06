@@ -36,6 +36,7 @@ import { EventBus } from '../core/EventBus.js'
 import Note from './Note.vue'
 
 export default {
+  props: ['bookName'],
   data () {
     return {
       notes: []
@@ -44,13 +45,14 @@ export default {
   components: { Note, InfiniteLoading },
   methods: {
     onInfinite () {
+      let params = {}
+      if (this.bookName) {
+        params.book = this.bookName
+      }
+      params.pages = this.notes.length / 20 + 1
       this.axios.get('/api/orotangi/notes/', {
-        params: {
-          page: (this.notes.length / 20) + 1
-        }
+        params: params
       }).then((res) => {
-        // console.log(res.data.results)
-        EventBus.$emit('getNotes', this.notes)
         if (res.data.count) {
           this.notes = this.notes.concat(res.data.results)
           this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
@@ -69,16 +71,6 @@ export default {
           console.log(error)
         })
       this.notes.splice(this.notes.indexOf(id), 1)
-    },
-    getNotes () {
-      this.axios.get('/api/orotangi/notes/')
-        .then(response => {
-          this.notes = response.data
-          /* emit an event to provide the books from the API only once */
-          EventBus.$emit('getNotes', this.notes)
-        }).catch(error => {
-          console.log(error)
-        })
     },
     newNote () {
       EventBus.$emit('newNote')
