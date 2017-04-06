@@ -5,7 +5,7 @@
         </div>
         <div class="column is-11">
             <div class="columns">
-            <notes></notes>
+            <router-view></router-view>
             <take-note></take-note>
             </div>
         </div>

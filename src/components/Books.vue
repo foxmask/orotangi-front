@@ -8,7 +8,6 @@
               <router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>
             </book>
         </nav>
-      <router-view></router-view>
     </div>
 </template>
 

@@ -42,21 +42,23 @@ export default {
       notes: []
     }
   },
+  watch: {
+    // call again the method if the route changes
+    '$route': 'refreshNote'
+  },
   components: { Note, InfiniteLoading },
   methods: {
     onInfinite () {
       let params = {}
-      if (this.bookName) {
-        params.book = this.bookName
-      }
-      params.pages = this.notes.length / 20 + 1
+      params.book = this.bookName
+      params.page = (this.notes.length / 20) + 1
       this.axios.get('/api/orotangi/notes/', {
         params: params
       }).then((res) => {
         if (res.data.count) {
           this.notes = this.notes.concat(res.data.results)
           this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
-          if (this.notes.length / 20 === 10) {
+          if (this.notes.count / 20 === 10) {
             this.$refs.infiniteLoading.$emit('$InfiniteLoading:complete')
           }
         } else {
@@ -64,7 +66,11 @@ export default {
         }
       })
     },
-
+    refreshNote () {
+      this.bookName = this.$route.params.bookName
+      this.notes = []
+      this.onInfinite()
+    },
     delNote (id) {
       this.axios.delete('/api/orotangi/notes/' + id + '/'
         ).catch((error) => {
@@ -80,8 +86,6 @@ export default {
     }
   },
   mounted () {
-    /* get the notes */
-    // this.getNotes()
     // reload the notes when one have been edited, created
     EventBus.$on('delNote', (note) => {
       this.delNote(note)
