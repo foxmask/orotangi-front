@@ -27,11 +27,7 @@
                 </p>
                 <span class="help is-danger" v-if="errors.has('title')" v-text="errors.getError('title')"></span>
 
-                <p class="control">
-                  <textarea class="textarea" placeholder="" rows="10" name="content" id="content" v-model="content" debounce="300" :value="content"></textarea>
-                </p>
-                <p class="control" v-html="compiledMarkdown">
-                </p>
+                <markdown-editor v-model="content" ref="markdownEditor"></markdown-editor>
                 <span class="help is-danger" v-if="errors.has('content')" v-text="errors.getError('content')"></span>
 
                 <p class="control">
@@ -55,13 +51,10 @@ import { EventBus } from '../core/EventBus.js'
 /* errors class */
 import Errors from '../core/Errors'
 /* markdown */
-import marked from 'marked'
-/* 'sub' vue */
-import Note from './Note.vue'
+import { markdownEditor } from 'vue-simplemde'
 
 export default {
-  components: { Note },
-
+  components: { markdownEditor },
   data () {
     return {
       id: 0,
@@ -71,12 +64,20 @@ export default {
       notes: [],
       errors: new Errors(),
       books: [],
-      thebooks: ''
+      thebooks: '',
+      configs: {
+        status: false,
+        initialValue: '',
+        renderingConfig: {
+          codeSyntaxHighlighting: true,
+          highlightingTheme: 'atom-one-light'
+        }
+      }
     }
   },
   computed: {
-    compiledMarkdown () {
-      return marked(this.content, { sanitize: true })
+    simplemde () {
+      return this.$refs.markdownEditor.simplemde
     }
   },
   methods: {
@@ -128,10 +129,6 @@ export default {
     removeNote (note) {
       EventBus.$emit('delNote', note)
       this.refresh()
-    },
-    /* render text un markdown */
-    renderContent (text) {
-      return marked(text, { sanitize: false })
     },
     /* clean the form */
     refresh () {

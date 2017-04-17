@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
+{% load static %}
+{% load staticfiles %}
+{% load i18n %}
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,24 +12,61 @@
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js" integrity="sha384-0s5Pv64cNZJieYFkXYOTId2HMA2Lfb6q2nAcx2n0RTLUnCAoTTsS0nKEO27XyKcY" crossorigin="anonymous"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js" integrity="sha384-ZoaMbDF+4LeFxg6WdScQ9nnR1QC2MIRxA1O9KWEXQwns1G8UNyIEZIQidzb0T1fo" crossorigin="anonymous"></script>
     <![endif]-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.min.css" integrity="sha256-8nf+BDtOgthqqdcfZXfDwth8LL6k314ILswPBDzXMp4=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
-<body role="document" class="container-fluid">
-    <div id="root">
+<body>
+    {% block navbar %}
+    <nav class="nav">
+        <div class="nav-left">
+          <a  class="nav-item brand-logo" href="{% url 'base' %}" title="{% trans 'Home' %}">Orotangi</a>
+        </div>
+      <!-- This "nav-toggle" hamburger menu is only visible on mobile -->
+      <!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
+        <span class="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </span>
+      <!-- This "nav-menu" is hidden on mobile -->
+      <!-- Add the modifier "is-active" to display it on mobile -->
+        <div class="nav-right nav-menu">
+            {% if user.is_authenticated %}
+            <a class="nav-item" href="{% url 'logout' %}" title="{% trans 'Log out' %}">
+            <span class="icon">
+              <i class="fa fa-sign-out"></i>
+            </span>
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+    {% endblock navbar %}
+    {% block content %}
+    {% endblock %}
+    {% if user.is_authenticated %}
+    <div class="container is-fluid" id="root">
         <app></app>
     </div>
+    {% endif %}
     <hr/>
     <footer class="footer">
-        <div class="container-fluid">
-            <p>Orotangi</p>
+        <div class="container">
+            <div class="content has-text-centered">
+            <p>
+                <strong>Orotangi</strong> by <a href="https://foxmask.trigger-happy.eu">FoxMaSk</a>.
+            </p>
+            <p>
+                <a class="icon" href="https://github.com/foxmask/orotangi">
+                    <i class="fa fa-github"></i>
+                </a>
+            </p>
+            </div>
         </div>
     </footer>
 
-    <!--script src="/dist/orotangi_vue.js"></script-->
+    {% block extrajs %}{% endblock %}
 </body>
 </html>
-
