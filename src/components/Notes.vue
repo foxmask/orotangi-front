@@ -15,6 +15,7 @@
                     </span>
                 </p>
             </div>
+          <div class="articles">
             <note v-for="note in notes" :key="note.id">
                 <a class="panel-block">
                     <span class="panel-icon">
@@ -23,7 +24,15 @@
                     <a href="#" @click="editNote(note)">{{ note.title }}</a>
                 </a>
             </note>
-            <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading"></infinite-loading>
+            <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading">
+              <span slot="no-results">
+                no notes found
+              </span>
+              <span slot="no-more">
+                no more notes
+              </span>
+            </infinite-loading>
+          </div>
         </nav>
     </div>
 </template>
@@ -55,7 +64,7 @@ export default {
       this.axios.get('/api/orotangi/notes/', {
         params: params
       }).then((res) => {
-        if (res.data.count) {
+        if (res.data.count > 0) {
           this.notes = this.notes.concat(res.data.results)
           this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded')
           if (this.notes.count / 20 === 10) {
@@ -86,6 +95,10 @@ export default {
     }
   },
   mounted () {
+    this.notes = []
+    this.$nextTick(() => {
+      this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
+    })
     // reload the notes when one have been edited, created
     EventBus.$on('delNote', (note) => {
       this.delNote(note)
@@ -94,3 +107,10 @@ export default {
 
 }
 </script>
+
+<style>
+  .articles {
+    height: 400px;
+    overflow: auto;
+  }
+</style>

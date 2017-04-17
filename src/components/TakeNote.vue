@@ -3,41 +3,43 @@
             <form method="post" class="form-horizontal" @submit.prevent="doNote" @keydown="errors.clear($event.target.name)">
                 <div class="control is-horizontal">
                     <div class="control is-grouped">
-                        <p class="control is-expanded">
-                            <span class="select is-fullwidth">
-                            <select v-model="book">
-                                <option v-for="book in books" v-bind:value="book.id">{{ book.name }}</option>
-                            </select>
-                            </span>
-                            <span class="help is-danger" v-if="errors.has('book')" v-text="errors.getError('book')"></span>
-                        </p>
-
-                        <p v-if="id" class="control is-expanded">
-                            <a class="button is-danger" :disabled="errors.any()" @click="removeNote(id)" >
-                                <span class="icon is-small">
-                                  <i class="fa fa-trash"></i>
+                        <div class="field has-addons">
+                            <p class="control is-expanded">
+                                <span class="select">
+                                <select v-model="book">
+                                    <option v-for="book in books" v-bind:value="book.id">{{ book.name }}</option>
+                                </select>
                                 </span>
-                            </a>
+                                <span class="help is-danger" v-if="errors.has('book')" v-text="errors.getError('book')"></span>
+                            </p>
+                            <p class="control">
+                                <a v-if="id" class="button is-danger" :disabled="errors.any()" @click="removeNote(id)" >
+                                    <span class="icon is-small">
+                                      <i class="fa fa-trash"></i>
+                                    </span>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control is-expanded">
+                                <input placeholder="no title" class="input is-primary is-fullwidth" name="title" id="title" v-model="title"/>
+                                <span class="help is-danger" v-if="errors.has('title')" v-text="errors.getError('title')"></span>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <markdown-editor v-model="content" ref="markdownEditor"></markdown-editor>
+                            <span class="help is-danger" v-if="errors.has('content')" v-text="errors.getError('content')"></span>
+                        </div>
+                        <p class="control is-expanded">
+                            <button class="button is-primary" :disabled="errors.any()" >
+                                <span class="icon is-small">
+                                  <i class="fa fa-save"></i>
+                                </span>
+                                <span>Save</span>
+                            </button>
                         </p>
                     </div>
                 </div>
-
-                <p class="control">
-                    <input placeholder="no title" class="input" name="title" id="title" v-model="title"/>
-                </p>
-                <span class="help is-danger" v-if="errors.has('title')" v-text="errors.getError('title')"></span>
-
-                <markdown-editor v-model="content" ref="markdownEditor"></markdown-editor>
-                <span class="help is-danger" v-if="errors.has('content')" v-text="errors.getError('content')"></span>
-
-                <p class="control">
-                    <button class="button is-primary" :disabled="errors.any()" >
-                        <span class="icon is-small">
-                          <i class="fa fa-save"></i>
-                        </span>
-                        <span>Save</span>
-                    </button>
-                </p>
 
             </form>
         </div>
