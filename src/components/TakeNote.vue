@@ -1,6 +1,6 @@
 <template>
         <div class="column is-9">
-            <form method="post" class="form-horizontal" @submit.prevent="doNote" @keydown="errors.clear($event.target.name)">
+            <form method="post" class="form-horizontal" @submit.prevent="doNote" @keydown="errors.clear($event.target.title)">
                 <div class="control is-horizontal">
                     <div class="control is-grouped">
                         <div class="field has-addons">

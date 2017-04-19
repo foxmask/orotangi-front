@@ -9,7 +9,7 @@
             </div>
             <div class="panel-block">
                 <p class="control has-icon">
-                    <input class="input is-small" type="text" placeholder="Search">
+                    <input class="input is-small" v-model="q" @keyup.enter="searchNote()" type="text" placeholder="Search">
                     <span class="icon is-small">
                         <i class="fa fa-search"></i>
                     </span>
@@ -48,7 +48,9 @@ export default {
   props: ['bookName'],
   data () {
     return {
-      notes: []
+      notes: [],
+      page: 1,
+      q: ''
     }
   },
   watch: {
@@ -58,9 +60,23 @@ export default {
   components: { Note, InfiniteLoading },
   methods: {
     onInfinite () {
+
       let params = {}
+
       params.book = this.bookName
-      params.page = (this.notes.length / 20) + 1
+
+      if ((this.notes.length / 20) < 1) {
+        params.page = this.page
+      } else {
+        this.page = (this.notes.length / 20) + 1
+        params.page = this.page
+      }
+
+      if (this.q !== '') {
+        params.q = this.q
+        params.page = this.page
+      }
+
       this.axios.get('/api/orotangi/notes/', {
         params: params
       }).then((res) => {
@@ -78,6 +94,7 @@ export default {
     refreshNote () {
       this.bookName = this.$route.params.bookName
       this.notes = []
+      this.q = ''
       this.onInfinite()
     },
     delNote (id) {
@@ -92,10 +109,15 @@ export default {
     },
     editNote (note) {
       EventBus.$emit('editNote', note)
+    },
+    searchNote () {
+      this.notes.length = 0
+      this.onInfinite()
     }
   },
   mounted () {
     this.notes = []
+    this.q = ''
     this.$nextTick(() => {
       this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset')
     })

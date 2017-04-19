@@ -27,8 +27,8 @@ export default {
   mounted () {
     /* get the books */
     this.axios.get('/api/orotangi/books/')
-      .then(response => {
-        this.books = response.data
+      .then(res => {
+        this.books = res.data.results
         /* emit an event to provide the books from the API only once */
         EventBus.$emit('getBooks', this.books)
       }).catch(error => {
