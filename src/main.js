@@ -30,7 +30,7 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 
 var EventBus = new Vue()
 
-import Notes from '@/components/Notes'
+import Notes from './components/Notes.vue'
 
 const routes = [
   { path: '/book/:bookName/notes', component: Notes, name: 'notesbybook', props: true }

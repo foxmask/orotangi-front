@@ -42,29 +42,16 @@ cp dist/orotangi_vue.js ../orotangi/orotangi/static/build/
 
 ## Testing in Dev environment
 
-in the config/index.js file you can set the proxy 
+Here the node devServer will start on port 8002 (see package.json) and will make calls of the Orotangi API on the port 8001
+
+As the API calls are done from a connected user, once the both server are started, go to http://localhost:8001/ to log in then http://localhost:8002/
 
 ```
-  dev: {
-    env: require('./dev.env'),
-    port: 8002,
-    autoOpenBrowser: true,
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-
-    proxyTable: {
-     '/api/orotangi/': {
-         target: 'http://localhost:8001/',
-         changeOrigin: true,
-         /*pathRewrite: {
-             '^/api/orotangi': '/api/orotangi'
-         }*/
-       }
-    },
-
+  devServer: {
+    historyApiFallback: true,
+    noInfo: true,
+    proxy: {
+            "/api/orotangi": "http://localhost:8001"
+    }
+  },
 ```
-
-Here the node server will start on port 8002 and will make call of the Django Rest Framework on the port 8001
-
-As the API call are done from a connected user, once the both server are started, go to http://localhost:8001/ to log in then http://localhost:8002/
-
