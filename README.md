@@ -37,7 +37,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 ### put the bundle in the django app
 
 ```bash
-cp dist/orotangi_vue.js ../orotangi/orotangi/static/build/
+cp dist/orotangi_vue.js ../orotangi/orotangi/static/
 ```
 
 ## Testing in Dev environment
