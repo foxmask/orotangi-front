@@ -15,7 +15,7 @@
                     </span>
                 </p>
             </div>
-          <div class="articles">
+            <div class="articles">
             <note v-for="note in notes" :key="note.id">
                 <a class="panel-block">
                     <span class="panel-icon">
@@ -32,7 +32,7 @@
                 no more notes
               </span>
             </infinite-loading>
-          </div>
+            </div>
         </nav>
     </div>
 </template>
