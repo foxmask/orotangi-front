@@ -22,6 +22,7 @@
     "cross-env": "^3.0.0",
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
+    "github-markdown-css": "^2.6.0",
     "js-cookie": "^2.1.4",
     "node-sass": "^4.5.0",
     "sass-loader": "^5.0.1",
@@ -31,6 +32,7 @@
     "vue-router": "^2.4.0",
     "vue-simplemde": "^0.3.7",
     "vue-template-compiler": "^2.2.1",
+    "vueckeditor": "^0.1.4",
     "webpack": "^2.2.0",
     "webpack-dev-server": "^2.2.0"
   }

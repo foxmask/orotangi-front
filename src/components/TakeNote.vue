@@ -27,7 +27,8 @@
                             </p>
                         </div>
                         <div class="field">
-                            <markdown-editor v-model="content" ref="markdownEditor"></markdown-editor>
+                          <vueckeditor v-model="content" v-bind:id="id"></vueckeditor>
+                            <!--markdown-editor v-model="content" ref="markdownEditor" preview-class="markdown-body"></markdown-editor-->
                             <span class="help is-danger" v-if="errors.has('content')" v-text="errors.getError('content')"></span>
                         </div>
                         <p class="control is-expanded">
@@ -53,10 +54,17 @@ import { EventBus } from '../core/EventBus.js'
 /* errors class */
 import Errors from '../core/Errors'
 /* markdown */
+import VueCkeditor from 'vueckeditor'
+
+/*
 import { markdownEditor } from 'vue-simplemde'
+require.ensure([], () => require('github-markdown-css'), 'markdown-style')
+import 'github-markdown-css'
+*/
 
 export default {
-  components: { markdownEditor },
+  // components: { markdownEditor },
+  components: { vueckeditor },
   data () {
     return {
       id: 0,
@@ -66,22 +74,45 @@ export default {
       notes: [],
       errors: new Errors(),
       books: [],
-      thebooks: '',
-      configs: {
+      thebooks: ''
+      /*configs: {
+        spellChecker: false,
         status: false,
         initialValue: '',
         renderingConfig: {
           codeSyntaxHighlighting: true,
-          highlightingTheme: 'atom-one-light'
-        }
-      }
+          // highlightingTheme: 'atom-one-light',
+        },
+        autofocus: true,
+        autosave: {
+          enabled: true,
+          uniqueId: "OroUniqueID",
+          delay: 1000,
+        },*/
+        /* toolbar: [
+          {
+            name: "opendyslexic",
+            action: function customFunction(editor){
+              // Add your own code
+            },
+            className: "fa fa-star",
+            title: "Open Dyslexic",
+          },
+          "|", // Separator
+        ],
+      } */
     }
   },
+  /*
   computed: {
+
     simplemde () {
+
       return this.$refs.markdownEditor.simplemde
     }
+
   },
+  */
   methods: {
     doNote () {
       if (this.id === 0 || this.id === undefined) {
@@ -164,3 +195,29 @@ export default {
   }
 }
 </script>
+
+<style>
+  @font-face {
+    font-family: "OpenDyslexic";
+    src: local('OpenDyslexicMono-Regular.otf');
+  }
+  @font-face {
+    font-family: "OpenDyslexic";
+    font-style: italic;
+    src: local('OpenDyslexic-Italic.otf');
+  }
+  @font-face {
+    font-family: "OpenDyslexic";
+    font-weight: bold;
+    font-style: italic;
+    src: local('OpenDyslexic-BoldItalic.otf');
+  }
+  @font-face {
+    font-family: "OpenDyslexic";
+    font-weight: bold;
+    src: local('OpenDyslexic-Bold.otf');
+  }
+  .markdown-editor {
+    font-family: "OpenDyslexic", Helvetica, Arial, sans-serif;
+  }
+</style>
