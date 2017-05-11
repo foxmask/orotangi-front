@@ -60,7 +60,6 @@ export default {
   components: { Note, InfiniteLoading },
   methods: {
     onInfinite () {
-
       let params = {}
 
       params.book = this.bookName

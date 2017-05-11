@@ -11,6 +11,8 @@
 npm install
 ```
 
+install [opendyslexic font](https://opendyslexic.org/) on your system
+
 ### serve with hot reload at localhost:8002
 
 ```bash

@@ -27,7 +27,7 @@
                             </p>
                         </div>
                         <div class="field">
-                            <markdown-editor v-model="content" ref="markdownEditor"></markdown-editor>
+                            <ckeditor v-model="content" :config="config"></ckeditor>
                             <span class="help is-danger" v-if="errors.has('content')" v-text="errors.getError('content')"></span>
                         </div>
                         <p class="control is-expanded">
@@ -40,10 +40,8 @@
                         </p>
                     </div>
                 </div>
-
             </form>
         </div>
-
 </template>
 
 
@@ -52,11 +50,11 @@
 import { EventBus } from '../core/EventBus.js'
 /* errors class */
 import Errors from '../core/Errors'
-/* markdown */
-import { markdownEditor } from 'vue-simplemde'
+
+import Ckeditor from 'vue-ckeditor2'
 
 export default {
-  components: { markdownEditor },
+  components: { Ckeditor },
   data () {
     return {
       id: 0,
@@ -67,19 +65,40 @@ export default {
       errors: new Errors(),
       books: [],
       thebooks: '',
+
+      config: {
+        toolbar: [
+          { name: 'document', items: [ 'Source', '-', 'Save', 'Preview', 'Print', '-'  ] },
+          { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
+          { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
+          '/',
+          { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat' ] },
+          { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+          { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+          { name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'Smiley' ] },
+          '/',
+          { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+          { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+          { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] }
+        ],
+        font_names: 'Arial;OpenDyslexic;Comic Sans MS;Courier New;Lucida Sans Unicode;Tahoma;Times New Roman;Trebuchet MS;Verdana;'
+      },
+
       configs: {
+        spellChecker: false,
         status: false,
         initialValue: '',
         renderingConfig: {
-          codeSyntaxHighlighting: true,
-          highlightingTheme: 'atom-one-light'
+          codeSyntaxHighlighting: true
+          // highlightingTheme: 'atom-one-light',
+        },
+        autofocus: true,
+        autosave: {
+          enabled: true,
+          uniqueId: 'OroUniqueID',
+          delay: 1000
         }
       }
-    }
-  },
-  computed: {
-    simplemde () {
-      return this.$refs.markdownEditor.simplemde
     }
   },
   methods: {
@@ -164,3 +183,26 @@ export default {
   }
 }
 </script>
+
+<style>
+  @font-face {
+    font-family: "OpenDyslexic";
+    src: local('src/assets/fonts/OpenDyslexicMono-Regular.otf');
+  }
+  @font-face {
+    font-family: "OpenDyslexic";
+    font-style: italic;
+    src: local('src/assets/fonts/OpenDyslexic-Italic.otf');
+  }
+  @font-face {
+    font-family: "OpenDyslexic";
+    font-weight: bold;
+    font-style: italic;
+    src: local('src/assets/fonts/OpenDyslexic-BoldItalic.otf');
+  }
+  @font-face {
+    font-family: "OpenDyslexic";
+    font-weight: bold;
+    src: local('src/assets/fonts/OpenDyslexic-Bold.otf');
+  }
+</style>
