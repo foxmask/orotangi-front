@@ -9,6 +9,7 @@ import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
 
 import App from './App.vue'
+import Notes from './components/Notes.vue'
 
 // get the SERVER_URL of prod or dev environment
 axios.defaults.baseURL = process.env.SERVER_URL
@@ -16,21 +17,16 @@ axios.defaults.baseURL = process.env.SERVER_URL
 Vue.use(VueAxios, axios)
 Vue.use(VueRouter)
 
-// Vue.config.productionTip = false
-
-// window.axios = axios;
 window.Cookies = require('js-cookie')
 
-var csrftoken = Cookies.get('csrftoken')
+let csrftoken = Cookies.get('csrftoken')
 
 axios.defaults.headers.common['cookiename'] = 'csrftoken'
 axios.defaults.headers.common['X-CSRFToken'] = csrftoken
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
 // axios.defaults.headers.common['Access-Control-Allow-Headers'] = '*'
 
-var EventBus = new Vue()
-
-import Notes from './components/Notes.vue'
+let EventBus = new Vue()
 
 const routes = [
   { path: '/book/:bookName/notes', component: Notes, name: 'notesbybook', props: true }

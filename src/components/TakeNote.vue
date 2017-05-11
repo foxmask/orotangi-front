@@ -27,8 +27,7 @@
                             </p>
                         </div>
                         <div class="field">
-                          <vueckeditor v-model="content" v-bind:id="id"></vueckeditor>
-                            <!--markdown-editor v-model="content" ref="markdownEditor" preview-class="markdown-body"></markdown-editor-->
+                            <ckeditor v-model="content" :config="config"></ckeditor>
                             <span class="help is-danger" v-if="errors.has('content')" v-text="errors.getError('content')"></span>
                         </div>
                         <p class="control is-expanded">
@@ -41,10 +40,8 @@
                         </p>
                     </div>
                 </div>
-
             </form>
         </div>
-
 </template>
 
 
@@ -53,18 +50,11 @@
 import { EventBus } from '../core/EventBus.js'
 /* errors class */
 import Errors from '../core/Errors'
-/* markdown */
-import VueCkeditor from 'vueckeditor'
 
-/*
-import { markdownEditor } from 'vue-simplemde'
-require.ensure([], () => require('github-markdown-css'), 'markdown-style')
-import 'github-markdown-css'
-*/
+import Ckeditor from 'vue-ckeditor2'
 
 export default {
-  // components: { markdownEditor },
-  components: { vueckeditor },
+  components: { Ckeditor },
   data () {
     return {
       id: 0,
@@ -74,45 +64,43 @@ export default {
       notes: [],
       errors: new Errors(),
       books: [],
-      thebooks: ''
-      /*configs: {
+      thebooks: '',
+
+      config: {
+        toolbar: [
+          { name: 'document', items: [ 'Source', '-', 'Save', 'Preview', 'Print', '-'  ] },
+          { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
+          { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
+          '/',
+          { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat' ] },
+          { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+          { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+          { name: 'insert', items: [ 'Image', 'Table', 'HorizontalRule', 'Smiley' ] },
+          '/',
+          { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+          { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+          { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] }
+        ],
+        font_names: 'Arial;OpenDyslexic;Comic Sans MS;Courier New;Lucida Sans Unicode;Tahoma;Times New Roman;Trebuchet MS;Verdana;'
+      },
+
+      configs: {
         spellChecker: false,
         status: false,
         initialValue: '',
         renderingConfig: {
-          codeSyntaxHighlighting: true,
+          codeSyntaxHighlighting: true
           // highlightingTheme: 'atom-one-light',
         },
         autofocus: true,
         autosave: {
           enabled: true,
-          uniqueId: "OroUniqueID",
-          delay: 1000,
-        },*/
-        /* toolbar: [
-          {
-            name: "opendyslexic",
-            action: function customFunction(editor){
-              // Add your own code
-            },
-            className: "fa fa-star",
-            title: "Open Dyslexic",
-          },
-          "|", // Separator
-        ],
-      } */
+          uniqueId: 'OroUniqueID',
+          delay: 1000
+        }
+      }
     }
   },
-  /*
-  computed: {
-
-    simplemde () {
-
-      return this.$refs.markdownEditor.simplemde
-    }
-
-  },
-  */
   methods: {
     doNote () {
       if (this.id === 0 || this.id === undefined) {
@@ -199,25 +187,22 @@ export default {
 <style>
   @font-face {
     font-family: "OpenDyslexic";
-    src: local('OpenDyslexicMono-Regular.otf');
+    src: local('src/assets/fonts/OpenDyslexicMono-Regular.otf');
   }
   @font-face {
     font-family: "OpenDyslexic";
     font-style: italic;
-    src: local('OpenDyslexic-Italic.otf');
+    src: local('src/assets/fonts/OpenDyslexic-Italic.otf');
   }
   @font-face {
     font-family: "OpenDyslexic";
     font-weight: bold;
     font-style: italic;
-    src: local('OpenDyslexic-BoldItalic.otf');
+    src: local('src/assets/fonts/OpenDyslexic-BoldItalic.otf');
   }
   @font-face {
     font-family: "OpenDyslexic";
     font-weight: bold;
-    src: local('OpenDyslexic-Bold.otf');
-  }
-  .markdown-editor {
-    font-family: "OpenDyslexic", Helvetica, Arial, sans-serif;
+    src: local('src/assets/fonts/OpenDyslexic-Bold.otf');
   }
 </style>
