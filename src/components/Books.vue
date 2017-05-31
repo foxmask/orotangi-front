@@ -2,7 +2,7 @@
     <div class="books">
         <nav class="panel">
             <p class="panel-heading">
-                <span class="panel-icon"><i class="fa fa-book"></i></span> Books
+                 Books
             </p>
             <div class="panel-block">
               <button class="button is-primary is-outlined is-fullwidth" @click="seen = !seen">
@@ -19,7 +19,7 @@
                 </p>
             </div>
             <book v-for="book in books" :key="book.id">
-              <router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>
+              <span class="panel-icon"><i class="fa fa-book"></i></span><router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>
               &nbsp;<a class="delete" @click="delBook(book.id)"></a>
             </book>
         </nav>

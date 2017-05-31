@@ -1,7 +1,7 @@
 <template>
     <div class="column is-3">
         <nav class="panel">
-            <p class="panel-heading">Note</p>
+            <p class="panel-heading">Notes</p>
             <div class="panel-block">
                 <button class="button is-primary is-outlined is-fullwidth" @click="newNote()">
                     New note
@@ -19,7 +19,7 @@
             <note v-for="note in notes" :key="note.id">
                 <a class="panel-block">
                     <span class="panel-icon">
-                        <i class="fa fa-file"></i>
+                        <i class="fa fa-file-text-o"></i>
                     </span>
                     <a href="#" @click="editNote(note)">{{ note.title }}</a>
                 </a>
@@ -131,7 +131,7 @@ export default {
 
 <style>
   .articles {
-    height: 400px;
+    height: 470px;
     overflow: auto;
   }
 </style>

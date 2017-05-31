@@ -81,7 +81,8 @@ export default {
           { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
           { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] }
         ],
-        font_names: 'Arial;OpenDyslexic;Comic Sans MS;Courier New;Lucida Sans Unicode;Tahoma;Times New Roman;Trebuchet MS;Verdana;'
+        font_names: 'Arial;OpenDyslexic;Comic Sans MS;Courier New;Lucida Sans Unicode;Tahoma;Times New Roman;Trebuchet MS;Verdana;',
+        height: '340px'
       },
 
       configs: {
