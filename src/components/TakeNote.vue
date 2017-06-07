@@ -7,7 +7,7 @@
                             <p class="control is-expanded">
                                 <span class="select">
                                 <select v-model="book">
-                                    <option v-for="book in books" v-bind:value="book.id">{{ book.name }}</option>
+                                    <option v-for="book in books" :value="book.id">{{ book.name }}</option>
                                 </select>
                                 </span>
                                 <span class="help is-danger" v-if="errors.has('book')" v-text="errors.getError('book')"></span>
@@ -68,7 +68,7 @@ export default {
 
       config: {
         toolbar: [
-          { name: 'document', items: [ 'Source', '-', 'Save', 'Preview', 'Print', '-'  ] },
+          { name: 'document', items: [ 'Source', '-', 'Save', 'Preview', 'Print', '-' ] },
           { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
           { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
           '/',
