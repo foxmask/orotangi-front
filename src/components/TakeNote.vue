@@ -1,47 +1,44 @@
 <template>
-        <div class="column is-9">
-            <form method="post" class="form-horizontal" @submit.prevent="doNote" @keydown="errors.clear($event.target.title)">
-                <div class="control is-horizontal">
-                    <div class="control is-grouped">
-                        <div class="field has-addons">
-                            <p class="control is-expanded">
-                                <span class="select">
-                                <select v-model="book">
-                                    <option v-for="book in books" :value="book.id">{{ book.name }}</option>
-                                </select>
-                                </span>
-                                <span class="help is-danger" v-if="errors.has('book')" v-text="errors.getError('book')"></span>
-                            </p>
-                            <p class="control">
-                                <a v-if="id" class="button is-danger" :disabled="errors.any()" @click="removeNote(id)" >
-                                    <span class="icon is-small">
-                                      <i class="fa fa-trash"></i>
-                                    </span>
-                                </a>
-                            </p>
-                        </div>
-                        <div class="field">
-                            <p class="control is-expanded">
-                                <input placeholder="no title" class="input is-primary is-fullwidth" name="title" id="title" v-model="title"/>
-                                <span class="help is-danger" v-if="errors.has('title')" v-text="errors.getError('title')"></span>
-                            </p>
-                        </div>
-                        <div class="field">
-                            <ckeditor v-model="content" :config="config"></ckeditor>
-                            <span class="help is-danger" v-if="errors.has('content')" v-text="errors.getError('content')"></span>
-                        </div>
-                        <p class="control is-expanded">
-                            <button class="button is-primary" :disabled="errors.any()" >
-                                <span class="icon is-small">
-                                  <i class="fa fa-save"></i>
-                                </span>
-                                <span>Save</span>
-                            </button>
-                        </p>
-                    </div>
+    <div class="col-xs-9 col-md-9 col-lg-9">
+        <form method="post" class="form-horizontal" @submit.prevent="doNote" @keydown="errors.clear($event.target.title)">
+            <div class="form-group">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <input placeholder="no title" class="form-control" name="title" id="title" v-model="title"/>
+                    <span class="help is-danger" v-if="errors.has('title')" v-text="errors.getError('title')"></span>
                 </div>
-            </form>
-        </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-9 col-md-9 col-lg-9">
+                  <span class="select">
+                  <select v-model="book" class="form-control">
+                      <option v-for="book in books" :value="book.id">{{ book.name }}</option>
+                  </select>
+                  </span>
+                  <span class="help is-danger" v-if="errors.has('book')" v-text="errors.getError('book')"></span>
+                </div>
+                <div class="col-sm-1 col-md-1 col-lg-1">
+                  <button v-if="id" class="btn btn-danger" :disabled="errors.any()" @click="removeNote(id)">
+                    <i class="fa fa-trash"></i> Delete this note ?
+                  </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                  <ckeditor v-model="content" :config="config"></ckeditor>
+                  <span class="help is-danger" v-if="errors.has('content')" v-text="errors.getError('content')"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                <button class="btn btn-primary" :disabled="errors.any()" >
+                  <span class="icon is-small"><i class="fa fa-save"></i></span>
+                  <span>Save</span>
+                </button>
+                </div>
+            </div>
+        </form>
+    </div>
 </template>
 
 

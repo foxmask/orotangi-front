@@ -1,28 +1,24 @@
 <template>
     <div class="books">
-        <nav class="panel">
-            <p class="panel-heading">
-                 Books
-            </p>
-            <div class="panel-block">
-              <button class="button is-primary is-outlined is-fullwidth" @click="seen = !seen">
-                New book
-              </button>
-            </div>
-            <div v-if="seen" class="panel-block">
-                <p class="control has-icon">
-                  <input class="input is-small" v-model="name" @keyup.enter="addBook()" type="text" placeholder="">
-                  <span class="help is-danger" v-if="errors.has('name')" v-text="errors.getError('name')"></span>
-                  <span class="icon is-small">
-                    <i class="fa fa-book"></i>
-                  </span>
-                </p>
-            </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Books </h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-group">
             <book v-for="book in books" :key="book.id">
-              <span class="panel-icon"><i class="fa fa-book"></i></span><router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>
-              &nbsp;<a class="delete" @click="delBook(book.id)"></a>
+                <li class="list-group-item"><i class="fa fa-book"></i> <router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link> <span class="badge">14</span></li>
+              <!--span class="panel-icon"><i class="fa fa-book"></i></span><router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>
+              &nbsp;<a class="delete" @click="delBook(book.id)"></a-->
             </book>
-        </nav>
+            </ul>
+            <div v-if="seen">
+              <input class="form-control" v-model="name" @keyup.enter="addBook()" type="text" placeholder="enter the book name">
+              <span class="help is-danger" v-if="errors.has('name')" v-text="errors.getError('name')"></span>
+            </div>
+          </div>
+          <div class="panel-footer"><button class="btn btn-default" @click="seen = !seen">New book</button></div>
+        </div>
     </div>
 </template>
 
@@ -40,7 +36,7 @@ export default {
       name: '',
       seen: false,
       books: [],
-      errors: new Errors(),
+      errors: new Errors()
     }
   },
   components: { Book },

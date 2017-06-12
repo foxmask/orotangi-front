@@ -1,40 +1,31 @@
 <template>
-    <div class="column is-3">
-        <nav class="panel">
-            <p class="panel-heading">Notes</p>
-            <div class="panel-block">
-                <button class="button is-primary is-outlined is-fullwidth" @click="newNote()">
-                    New note
-                </button>
-            </div>
-            <div class="panel-block">
-                <p class="control has-icon">
-                    <input class="input is-small" v-model="q" @keyup.enter="searchNote()" type="text" placeholder="Search">
-                    <span class="icon is-small">
-                        <i class="fa fa-search"></i>
-                    </span>
-                </p>
-            </div>
-            <div class="articles">
-            <note v-for="note in notes" :key="note.id">
-                <a class="panel-block">
-                    <span class="panel-icon">
-                        <i class="fa fa-file-text-o"></i>
-                    </span>
-                    <a href="#" @click="editNote(note)">{{ note.title }}</a>
-                </a>
-            </note>
-            <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading">
+  <div class="col-xs-3 col-md-3 col-lg-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Notes</h3>
+      </div>
+      <div class="panel-body">
+        <div class="articles">
+          <ul class="list-group">
+          <note v-for="note in notes" :key="note.id">
+              <li class="list-group-item"><i class="fa fa-file-text-o"></i> <a href="#" @click="editNote(note)">{{ note.title }}</a></li>
+          </note>
+          </ul>
+          <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading">
               <span slot="no-results">
                 no notes found
               </span>
-              <span slot="no-more">
+            <span slot="no-more">
                 no more notes
               </span>
-            </infinite-loading>
-            </div>
-        </nav>
+          </infinite-loading>
+        </div>
+      <div class="panel-footer">
+          <button class="btn btn-default" @click="newNote()">New note</button>
+      </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -60,6 +51,7 @@ export default {
   components: { Note, InfiniteLoading },
   methods: {
     onInfinite () {
+
       let params = {}
 
       params.book = this.bookName
@@ -123,6 +115,10 @@ export default {
     // reload the notes when one have been edited, created
     EventBus.$on('delNote', (note) => {
       this.delNote(note)
+    })
+    EventBus.$on('searchNote', (q) => {
+      this.q = q
+      this.searchNote()
     })
   }
 

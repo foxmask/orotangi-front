@@ -1,0 +1,27 @@
+body {
+    padding-top: 70px;
+    padding-bottom: 30px;
+}
+
+
+li {
+    list-style: none;
+}
+
+
+/****
+ * Menu
+ */
+
+/***
+ * put the icon in the "grey" light as they went white on white
+ */
+.nav-tabs > .active > a,
+.nav-tabs > .active > a:hover {
+  color: #555555;
+  cursor: default;
+  background-color: #eeeeee;
+  border: 1px solid #ddd;
+  border-bottom-color: transparent;
+}
+
