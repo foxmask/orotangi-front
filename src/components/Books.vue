@@ -7,9 +7,7 @@
           <div class="panel-body">
             <ul class="list-group">
             <book v-for="book in books" :key="book.id">
-                <li class="list-group-item"><i class="fa fa-book"></i> <router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link> <span class="badge">14</span></li>
-              <!--span class="panel-icon"><i class="fa fa-book"></i></span><router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>
-              &nbsp;<a class="delete" @click="delBook(book.id)"></a-->
+              <li class="list-group-item"><i class="fa fa-book"></i> <router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>&nbsp;<!-- a class="delete" @click="delBook(book.id)"><i class="fa fa-trash"></i></a --></li>
             </book>
             </ul>
             <div v-if="seen">

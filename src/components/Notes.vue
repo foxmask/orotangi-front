@@ -36,7 +36,6 @@ import { EventBus } from '../core/EventBus.js'
 import Note from './Note.vue'
 
 export default {
-  props: ['bookName'],
   data () {
     return {
       notes: [],

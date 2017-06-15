@@ -1,5 +1,5 @@
 <template>
-    <div class="col-xs-9 col-md-9 col-lg-9">
+    <div class="col-sm-9 col-md-9 col-lg-9">
         <form method="post" class="form-horizontal" @submit.prevent="doNote" @keydown="errors.clear($event.target.title)">
             <div class="form-group">
                 <div class="col-sm-12 col-md-12 col-lg-12">
@@ -7,9 +7,8 @@
                     <span class="help is-danger" v-if="errors.has('title')" v-text="errors.getError('title')"></span>
                 </div>
             </div>
-
             <div class="form-group">
-                <div class="col-xs-9 col-md-9 col-lg-9">
+                <div class="col-sm-9 col-md-9 col-lg-9">
                   <span class="select">
                   <select v-model="book" class="form-control">
                       <option v-for="book in books" :value="book.id">{{ book.name }}</option>
@@ -31,10 +30,10 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-12">
-                <button class="btn btn-primary" :disabled="errors.any()" >
-                  <span class="icon is-small"><i class="fa fa-save"></i></span>
-                  <span>Save</span>
-                </button>
+                  <button class="btn btn-primary" :disabled="errors.any()" >
+                    <span class="icon is-small"><i class="fa fa-save"></i></span>
+                    <span>Save</span>
+                  </button>
                 </div>
             </div>
         </form>
@@ -65,7 +64,7 @@ export default {
 
       config: {
         toolbar: [
-          { name: 'document', items: [ 'Source', '-', 'Save', 'Preview', 'Print', '-' ] },
+          { name: 'document', items: [ 'Source', '-', 'Preview', 'Print', '-' ] },
           { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', '-', 'Undo', 'Redo' ] },
           { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
           '/',
@@ -78,7 +77,7 @@ export default {
           { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
           { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] }
         ],
-        font_names: 'Arial;OpenDyslexic;Comic Sans MS;Courier New;Lucida Sans Unicode;Tahoma;Times New Roman;Trebuchet MS;Verdana;',
+        font_names: 'OpenDyslexic;Arial;Comic Sans MS;Courier New;Lucida Sans Unicode;Tahoma;Times New Roman;Trebuchet MS;Verdana;',
         height: '340px'
       },
 
