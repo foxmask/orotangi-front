@@ -1,28 +1,22 @@
 <template>
   <div class="col-xs-3 col-md-3 col-lg-3">
-    <div class="panel panel-default">
+    <div class="panel panel-warning">
       <div class="panel-heading">
         <h3 class="panel-title">Notes</h3>
       </div>
-      <div class="panel-body">
-        <div class="articles">
-          <ul class="list-group">
-          <note v-for="note in notes" :key="note.id">
-              <li class="list-group-item"><i class="fa fa-file-text-o"></i> <a href="#" @click="editNote(note)">{{ note.title }}</a></li>
-          </note>
-          </ul>
-          <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading">
-              <span slot="no-results">
-                no notes found
-              </span>
-            <span slot="no-more">
-                no more notes
-              </span>
-          </infinite-loading>
-        </div>
-      <div class="panel-footer">
-          <button class="btn btn-default" @click="newNote()">New note</button>
+      <div class="articles">
+        <ul class="list-group">
+        <note v-for="note in notes" :key="note.id">
+            <li class="list-group-item"><i class="fa fa-file-text-o"></i> <a href="#" @click="editNote(note)">{{ note.title }}</a></li>
+        </note>
+        </ul>
+        <infinite-loading :on-infinite="onInfinite" ref="infiniteLoading">
+            <span slot="no-results">no notes found</span>
+            <span slot="no-more">no more notes</span>
+        </infinite-loading>
       </div>
+      <div class="panel-footer">
+          <button class="btn btn-success" @click="newNote()"><i class="fa fa-plus"></i>  note</button>
       </div>
     </div>
   </div>

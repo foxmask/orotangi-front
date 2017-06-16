@@ -1,21 +1,25 @@
 <template>
     <div class="books">
-        <div class="panel panel-default">
+        <div class="panel panel-info">
           <div class="panel-heading">
-            <h3 class="panel-title">Books </h3>
+            <h3 class="panel-title">Books</h3>
           </div>
-          <div class="panel-body">
-            <ul class="list-group">
-            <book v-for="book in books" :key="book.id">
-              <li class="list-group-item"><i class="fa fa-book"></i> <router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>&nbsp;<!-- a class="delete" @click="delBook(book.id)"><i class="fa fa-trash"></i></a --></li>
-            </book>
-            </ul>
-            <div v-if="seen">
+          <div class="panel-body" v-if="seen">
               <input class="form-control" v-model="name" @keyup.enter="addBook()" type="text" placeholder="enter the book name">
               <span class="help is-danger" v-if="errors.has('name')" v-text="errors.getError('name')"></span>
-            </div>
           </div>
-          <div class="panel-footer"><button class="btn btn-default" @click="seen = !seen">New book</button></div>
+          <div class="articles">
+            <ul class="list-group">
+            <book v-for="book in books" :key="book.id">
+                <li class="list-group-item"><i class="fa fa-book"></i>
+                <router-link :to="{ name: 'notesbybook', params: {bookName: book.name}}">{{ book.name }}</router-link>&nbsp;<!-- a class="delete" @click="delBook(book.id)"><i class="fa fa-trash"></i></a -->
+                </li>
+            </book>
+            </ul>
+          </div>
+          <div class="panel-footer">
+            <button class="btn btn-success" @click="seen = !seen"><i class="fa fa-plus"></i> book</button>
+          </div>
         </div>
     </div>
 </template>
@@ -34,10 +38,11 @@ export default {
       name: '',
       seen: false,
       books: [],
+      page: 1,
       errors: new Errors()
     }
   },
-  components: { Book },
+  components: { Book},
   methods: {
     /* create a book */
     addBook () {
@@ -69,7 +74,6 @@ export default {
     this.axios.get('/api/orotangi/books/')
       .then(res => {
         this.books = res.data.results
-        /* emit an event to provide the books from the API only once */
         EventBus.$emit('getBooks', this.books)
       }).catch(error => {
         console.log(error)
@@ -77,3 +81,10 @@ export default {
   }
 }
 </script>
+
+<style>
+  .articles {
+    height: 470px;
+    overflow: auto;
+  }
+</style>
