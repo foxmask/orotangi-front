@@ -16,7 +16,7 @@
         </infinite-loading>
       </div>
       <div class="panel-footer">
-          <button class="btn btn-success" @click="newNote()"><i class="fa fa-plus"></i>  note</button>
+          <button class="btn btn-success" @click="newNote()"><i class="fa fa-plus"></i> note</button>
       </div>
     </div>
   </div>
